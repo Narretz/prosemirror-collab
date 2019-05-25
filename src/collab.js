@@ -119,7 +119,6 @@ export function receiveTransaction(state, steps, clientIDs, options) {
   // appropriate. Remaining unconfirmed steps will be rebased over
   // remote steps.
   let collabState = collabKey.getState(state)
-  let version = collabState.version + steps.length
   let ourID = collabKey.get(state).spec.config.clientID
 
   // Find out which prefix of the steps originated with us
@@ -128,6 +127,8 @@ export function receiveTransaction(state, steps, clientIDs, options) {
   let unconfirmed = collabState.unconfirmed.slice(ours)
   steps = ours ? steps.slice(ours) : steps
 
+  let version = collabState.version + steps.length  
+  
   // If all steps originated with us, we're done.
   if (!steps.length)
     return state.tr.setMeta(collabKey, new CollabState(version, unconfirmed))
